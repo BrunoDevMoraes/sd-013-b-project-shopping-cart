@@ -64,7 +64,7 @@ async function makeButtonsListen() {
         console.log(request);
         document.querySelector('.cart__items')
         .appendChild(createCartItemElement(
-          { sku: request.id, name: request.title, salePrice: request.price }
+          { sku: request.id, name: request.title, salePrice: request.price },
           ));
       }
       requestWantedItem();
