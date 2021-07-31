@@ -29,14 +29,14 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-  // event.target.remove('li');
+  event.target.remove('li');
 }
 
 function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
   li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
-  li.addEventListener('click', cartItemClickListener());
+  li.addEventListener('click', cartItemClickListener); // Pq só funciona sem os () de cartItemClickListener?
   return li;
 }
 
@@ -54,12 +54,9 @@ async function createItemList() {
 // 2
 function createLiElement(id) {
   const cartItems = document.querySelector('.cart__items');
-  console.log(cartItems);
   fetch(`https://api.mercadolibre.com/items/${id}`)
   .then((request) => request.json())
-  .then((data) => {
-    cartItems.appendChild(createCartItemElement(data));
-  });
+  .then((data) => cartItems.appendChild(createCartItemElement(data)));
 }
 
 function catchId() {
@@ -67,7 +64,6 @@ function catchId() {
   buttons.forEach((button) => {
     button.addEventListener('click', (event) => {
       const wantedId = getSkuFromProductItem(event.target.parentElement);
-      console.log(wantedId);
       createLiElement(wantedId);
     });
 });
