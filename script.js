@@ -29,13 +29,13 @@ function getSkuFromProductItem(item) {
 }
 
 function cartItemClickListener(event) {
-// Seu código aqui
+  // event.target.remove('li');
 }
 
-function createCartItemElement({ sku, name, salePrice }) {
+function createCartItemElement({ id, title, price }) {
   const li = document.createElement('li');
   li.className = 'cart__item';
-  li.innerText = `SKU: ${sku} | NAME: ${name} | PRICE: $${salePrice}`;
+  li.innerText = `SKU: ${id} | NAME: ${title} | PRICE: $${price}`;
   li.addEventListener('click', cartItemClickListener());
   return li;
 }
@@ -52,27 +52,28 @@ async function createItemList() {
 }
 
 // 2
-async function makeButtonsListen() {
+function createLiElement(id) {
+  const cartItems = document.querySelector('.cart__items');
+  console.log(cartItems);
+  fetch(`https://api.mercadolibre.com/items/${id}`)
+  .then((request) => request.json())
+  .then((data) => {
+    cartItems.appendChild(createCartItemElement(data));
+  });
+}
+
+function catchId() {
   const buttons = document.querySelectorAll('.item__add');
   buttons.forEach((button) => {
     button.addEventListener('click', (event) => {
-      const item = event.target.parentElement;
-      async function requestWantedItem() {
-        const completeRequest = await
-        fetch(`https://api.mercadolibre.com/items/${item.firstChild.innerText}`);
-        const request = await completeRequest.json();
-        console.log(request);
-        document.querySelector('.cart__items')
-        .appendChild(createCartItemElement(
-          { sku: request.id, name: request.title, salePrice: request.price },
-          ));
-      }
-      requestWantedItem();
+      const wantedId = getSkuFromProductItem(event.target.parentElement);
+      console.log(wantedId);
+      createLiElement(wantedId);
     });
-  });
+});
 }
 
 window.onload = async () => {
   await createItemList();
-  await makeButtonsListen();
+  catchId();
 };
