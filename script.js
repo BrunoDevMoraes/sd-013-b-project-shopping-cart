@@ -1,3 +1,6 @@
+// Special Thanks: Thiago Souza - Turma 13 - Tribo B
+//                 Victor Mendonça - Turma 13 - Tribo B
+
 const cartItems = '.cart__items';
 
 function createProductImageElement(imageSource) {
@@ -33,12 +36,12 @@ function getSkuFromProductItem(item) {
 // 4
 function saveOnLocalStorage() {
   const allItems = document.querySelector(cartItems);
-  localStorage.setItem('cart', JSON.stringify(allItems.innerHTML)); // Estudar sintaxe de LocalStorage
+  localStorage.setItem('cart', JSON.stringify(allItems.innerHTML));
 }
 
 // 3
 function cartItemClickListener(event) {
-  event.target.remove('li');
+  event.target.remove();
   saveOnLocalStorage();
 }
 
@@ -47,10 +50,6 @@ function getFromLocal() {
   const cartFromLocal = JSON.parse(localStorage.getItem('cart'));
   const ol = document.querySelector(cartItems);
   ol.innerHTML = cartFromLocal;
-  const olAll = document.querySelectorAll(cartItems);
-  olAll.forEach((li) => {
-    li.addEventListener('click', cartItemClickListener);
-  });
 }
 
 function createCartItemElement({ id, title, price }) {
@@ -94,13 +93,16 @@ function catchId() {
 });
 }
 
+// 6
 function clearCart() {
   const clearButton = document.querySelector('.empty-cart');
   clearButton.addEventListener('click', () => {
     document.querySelector(cartItems).innerHTML = '';
+    saveOnLocalStorage();
   });
 }
 
+// 7
 function addLoading() {
   const loading = document.createElement('div');
   document.querySelector('body')
@@ -114,7 +116,8 @@ function removeLoading() {
   loading.remove();
 }
 
-window.onload = async function onload() { // Olhar documentação onload
+// Renderização
+window.onload = async function project() {
   addLoading();
   getFromLocal();
   await createItemList();
