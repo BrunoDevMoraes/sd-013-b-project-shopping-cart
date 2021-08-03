@@ -118,7 +118,7 @@ function removeLoading() {
   loading.remove();
 }
 
-// Renderização
+// Render
 window.onload = async function project() {
   addLoading();
   getFromLocal();
