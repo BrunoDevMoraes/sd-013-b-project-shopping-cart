@@ -2,6 +2,8 @@
 //                 Victor Mendonça - Turma 13 - Tribo B
 
 const cartItems = '.cart__items';
+let totalPrice = 0;
+const totalPriceClass = '.total-price';
 
 function createProductImageElement(imageSource) {
   const img = document.createElement('img');
@@ -33,6 +35,27 @@ function getSkuFromProductItem(item) {
   return item.querySelector('span.item__sku').innerText;
 }
 
+// 5
+function increaseTotalPrice(item) {
+  totalPrice += item.price;
+  document.querySelector(totalPriceClass)
+  .innerText = totalPrice;
+}
+
+function decreaseTotalPrice(item) { // Passando no teste, porém com bug na hora de tirar do carrinho
+  const str = item.innerText;
+  let wantedStr = '';
+  for (let index = 0; index < str.length; index += 1) {
+    if (str[index] === '$') {
+      wantedStr = str.slice((index + 1), (str.length));
+    }
+  }
+  const wantedNumber = parseFloat(wantedStr);
+  totalPrice -= wantedNumber;
+  document.querySelector(totalPriceClass)
+  .innerText = totalPrice;
+}
+
 // 4
 function saveOnLocalStorage() {
   const allItems = document.querySelector(cartItems);
@@ -43,6 +66,7 @@ function saveOnLocalStorage() {
 function cartItemClickListener(event) {
   event.target.remove();
   saveOnLocalStorage();
+  decreaseTotalPrice(event.target);
 }
 
 // 4
@@ -72,6 +96,8 @@ async function createItemList() {
     );
     list.appendChild(productElement);
   });
+  document.querySelector(totalPriceClass)
+  .innerText = totalPrice;
 }
 
 // 2
@@ -82,6 +108,7 @@ function createLiElement(id) {
   .then((data) => {
     ol.appendChild(createCartItemElement(data));
     saveOnLocalStorage();
+    increaseTotalPrice(data);
   });
 }
 
