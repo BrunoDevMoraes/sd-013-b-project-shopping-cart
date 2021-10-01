@@ -1,3 +1,7 @@
+body {
+  background-color: orange;
+}
+
 .top-bar {
   align-items: center;
   display: flex;
